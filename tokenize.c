@@ -8,7 +8,11 @@
 #include "error.h"
 #include "tokenize.h"
 
-Token *push_token(TokenKind kind, Token *tail, char *str) {
+bool startswith(char *str, char *prefix) {
+    return strncmp(str, prefix, strlen(prefix)) == 0;
+}
+
+Token *push_token(TokenKind kind, Token *tail, char *str, int len) {
     Token *tok = calloc(1, sizeof(Token));
     if (tok == NULL) {
         error("calloc error");
@@ -16,6 +20,7 @@ Token *push_token(TokenKind kind, Token *tail, char *str) {
     tok->kind = kind;
     tok->next = NULL;
     tok->str = str;
+    tok->len = len;
     tail->next = tok;
 
     return tok;
@@ -32,14 +37,20 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if (strchr("+-*/()", *p)) {
-            current_token = push_token(TK_RESERVED, current_token, p);
+        if (startswith(p, "==") || startswith(p, "!=") || startswith(p, "<=") || startswith(p, ">=")) {
+            current_token = push_token(TK_RESERVED, current_token, p, 2);
+            p += 2;
+            continue;
+        }
+
+        if (strchr("+-*/()<>", *p)) {
+            current_token = push_token(TK_RESERVED, current_token, p, 1);
             p++;
             continue;
         }
 
         if (isdigit(*p)) {
-            current_token = push_token(TK_NUM, current_token, p);
+            current_token = push_token(TK_NUM, current_token, p, 0);
             current_token->val = strtol(p, &p, 10);
             continue;
         }
@@ -47,7 +58,7 @@ Token *tokenize(char *p) {
         error("tokenize");
     }
 
-    current_token = push_token(TK_EOF, current_token, p);
+    current_token = push_token(TK_EOF, current_token, p, 0);
     return head.next;
 }
 
