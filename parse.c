@@ -61,6 +61,7 @@ Node *new_node_num(int val) {
 
 Node *parse_expr();
 Node *parse_term();
+Node *parse_unary();
 Node *parse_factor();
 
 Node *parse(Token *tok) {
@@ -83,17 +84,27 @@ Node *parse_expr() {
 }
 
 Node *parse_term() {
-    Node *node = parse_factor();
+    Node *node = parse_unary();
 
     for (;;) {
         if (consume_punct('*')) {
-            node = new_node(ND_MUL, node, parse_factor());
+            node = new_node(ND_MUL, node, parse_unary());
         } else if (consume_punct('/')) {
-            node = new_node(ND_DIV, node, parse_factor());
+            node = new_node(ND_DIV, node, parse_unary());
         } else {
             return node;
         }
     }
+}
+
+Node *parse_unary() {
+    if (consume_punct('+')) {
+        return parse_factor();
+    }
+    if (consume_punct('-')) {
+        return new_node(ND_SUB, new_node_num(0), parse_factor());
+    }
+    return parse_factor();
 }
 
 Node *parse_factor() {
