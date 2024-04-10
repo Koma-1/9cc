@@ -141,6 +141,12 @@ Node *parse_stmt() {
         if (consume_token_kind(TK_ELSE)) {
             node->rhs = parse_stmt();
         }
+    } else if (consume_token_kind(TK_WHILE)) {
+        expect_punct("(");
+        Node *cond = parse_expr();
+        expect_punct(")");
+        Node *stmt = parse_stmt();
+        node = new_node(ND_WHILESTMT, cond, stmt);
     } else {
         node = parse_expr();
         expect_punct(";");

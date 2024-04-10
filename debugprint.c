@@ -34,6 +34,9 @@ void print_tokens(Token *tok) {
             case TK_ELSE:
                 printf("%.*s\tTK_ELSE\n", current_token->len, current_token->str);
                 break;
+            case TK_WHILE:
+                printf("%.*s\tTK_WHILE\n", current_token->len, current_token->str);
+                break;
             case TK_EOF:
                 printf("TK_EOF\n");
                 break;
@@ -105,6 +108,9 @@ void print_nodes(Node *node, int indent) {
                 break;
             case ND_IFBRANCH:
                 printf("ND_IFBRANCH");
+                break;
+            case ND_WHILESTMT:
+                printf("ND_WHILESTMT");
                 break;
             default:
                 error("unreachable");

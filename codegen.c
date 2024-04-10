@@ -55,7 +55,7 @@ void codegen(Node *node) {
             printf("    pop rbp\n");
             printf("    ret\n");
             return;
-        case ND_IFSTMT:
+        case ND_IFSTMT:{
             int else_label = new_mangle_number();
             int end_label = new_mangle_number();
             codegen(node->lhs->lhs); // ifbranch -> cond
@@ -69,8 +69,19 @@ void codegen(Node *node) {
                 codegen(node->rhs); // else -> stmt
             }
             printf(".Lend%010d:\n", end_label);
-            return;
-
+            return;}
+        case ND_WHILESTMT:{
+            int begin_label = new_mangle_number();
+            int end_label = new_mangle_number();
+            printf(".Lbegin%010d:\n", begin_label);
+            codegen(node->lhs);
+            printf("    pop rax\n");
+            printf("    cmp rax, 0\n");
+            printf("    je .Lend%010d\n", end_label);
+            codegen(node->rhs);
+            printf("    jmp .Lbegin%010d\n", begin_label);
+            printf(".Lend%010d:\n", end_label);
+            return;}
     }
 
     codegen(node->lhs);

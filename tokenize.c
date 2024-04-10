@@ -79,6 +79,8 @@ Token *tokenize(char *p) {
                 current_token = push_token(TK_IF, current_token, p, len);
             } else if (len == 4 && !strncmp(p, "else", len)) {
                 current_token = push_token(TK_ELSE, current_token, p, len);
+            } else if (len == 5 && !strncmp(p, "while", len)) {
+                current_token = push_token(TK_WHILE, current_token, p, len);
             } else {
                 current_token = push_token(TK_IDENT, current_token, p, len);
             }
