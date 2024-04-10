@@ -57,12 +57,12 @@ void codegen(Node *node) {
             printf("    movzb rax, al\n");
             break;
         case ND_GT:
-            printf("    cmp rax, rdi\n");
+            printf("    cmp rdi, rax\n");
             printf("    setl al\n");
             printf("    movzb rax, al\n");
             break;
         case ND_GEQ:
-            printf("    cmp rax, rdi\n");
+            printf("    cmp rdi, rax\n");
             printf("    setle al\n");
             printf("    movzb rax, al\n");
             break;
