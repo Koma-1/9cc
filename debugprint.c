@@ -17,17 +17,22 @@ void print_tokens(Token *tok) {
     while (current_token) {
         switch (current_token->kind) {
             case TK_RESERVED:
-                printf("%.*s\tTK_RESERVED\n", current_token->len, current_token->str);
+                printf("%.*s\tTK_RESERVED(%d)\n", current_token->len, current_token->str, current_token->len);
                 break;
             case TK_NUM:
                 printf("%d\tTK_NUM\n", current_token->val);
                 break;
             case TK_IDENT:
-                printf("%.*s\tTK_IDENT\n", current_token->len, current_token->str);
+                printf("%.*s\tTK_IDENT(%d)\n", current_token->len, current_token->str, current_token->len);
+                break;
+            case TK_RETURN:
+                printf("%.*s\tTK_RETURN\n", current_token->len, current_token->str);
                 break;
             case TK_EOF:
                 printf("TK_EOF\n");
                 break;
+            default:
+                error("unreachable");
         }
         current_token = current_token->next;
     }
@@ -46,6 +51,13 @@ void print_nodes(Node *node, int indent) {
         printf("ND_NUM{%d}", node->val);
     } else if (node->kind == ND_LVAR) {
         printf("ND_LVAR{%d}", node->offset);
+    } else if (node->kind == ND_RETURN) {
+        printf("ND_RETURN");
+        printf("{\n");
+        print_nodes(node->lhs, indent+1);
+        putchar('\n');
+        print_indent(indent);
+        putchar('}');
     } else {
         switch (node->kind) {
             case ND_ADD:

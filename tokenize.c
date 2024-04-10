@@ -16,7 +16,7 @@ bool is_alnum(char c) {
     return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || (c == '_');
 }
 
-int consume_alnum_str(char *c, char **endptr) {
+int get_alnum_str(char *c, char **endptr) {
     char *tmp = c;
     int len = 0;
     while (is_alnum(*tmp)) {
@@ -72,8 +72,12 @@ Token *tokenize(char *p) {
 
         if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z') || (*p == '_')) {
             char *endp;
-            int len = consume_alnum_str(p, &endp);
-            current_token = push_token(TK_IDENT, current_token, p, len);
+            int len = get_alnum_str(p, &endp);
+            if (len == 6 && !strncmp(p, "return", len)) {
+                current_token = push_token(TK_RETURN, current_token, p, len);
+            } else {
+                current_token = push_token(TK_IDENT, current_token, p, len);
+            }
             p = endp;
             continue;
         }

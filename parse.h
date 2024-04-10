@@ -13,6 +13,7 @@ typedef enum {
     ND_GEQ,
     ND_ASSIGN,
     ND_LVAR,
+    ND_RETURN,
     ND_NUM,
 } NodeKind;
 

@@ -14,6 +14,14 @@ Token *token;
 LVar *locals;
 Node *code[100];
 
+bool consume_token_kind(TokenKind kind) {
+    if (token->kind != kind) {
+        return false;
+    }
+    token = token->next;
+    return true;
+}
+
 void expect_punct(char *op) {
     if (token->kind != TK_RESERVED) {
         error("TK_RESERVED token \"%s\" expected, but got %d('%c')", op, token->kind, token->str[0]);
@@ -120,7 +128,13 @@ void parse_program(Token *tok) {
 }
 
 Node *parse_stmt() {
-    Node *node = parse_expr();
+    Node *node;
+    if (consume_token_kind(TK_RETURN)) {
+        node = new_node(ND_RETURN, parse_expr(), NULL);
+    } else {
+        node = parse_expr();
+    }
+
     expect_punct(";");
     return node;
 }
