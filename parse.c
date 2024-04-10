@@ -131,11 +131,21 @@ Node *parse_stmt() {
     Node *node;
     if (consume_token_kind(TK_RETURN)) {
         node = new_node(ND_RETURN, parse_expr(), NULL);
+        expect_punct(";");
+    } else if (consume_token_kind(TK_IF)) {
+        expect_punct("(");
+        Node *cond = parse_expr();
+        expect_punct(")");
+        Node *stmt = parse_stmt();
+        node = new_node(ND_IFSTMT, new_node(ND_IFBRANCH, cond, stmt), NULL);
+        if (consume_token_kind(TK_ELSE)) {
+            node->rhs = parse_stmt();
+        }
     } else {
         node = parse_expr();
+        expect_punct(";");
     }
 
-    expect_punct(";");
     return node;
 }
 

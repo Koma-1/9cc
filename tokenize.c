@@ -75,6 +75,10 @@ Token *tokenize(char *p) {
             int len = get_alnum_str(p, &endp);
             if (len == 6 && !strncmp(p, "return", len)) {
                 current_token = push_token(TK_RETURN, current_token, p, len);
+            } else if (len == 2 && !strncmp(p, "if", len)) {
+                current_token = push_token(TK_IF, current_token, p, len);
+            } else if (len == 4 && !strncmp(p, "else", len)) {
+                current_token = push_token(TK_ELSE, current_token, p, len);
             } else {
                 current_token = push_token(TK_IDENT, current_token, p, len);
             }

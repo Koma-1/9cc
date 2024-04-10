@@ -10,6 +10,12 @@
 #include "parse.h"
 #include "codegen.h"
 
+int mangle_counter = 0;
+
+int new_mangle_number() {
+    return ++mangle_counter;
+}
+
 void codegen_lval(Node *node) {
     if (node->kind != ND_LVAR) {
         error("ND_LVAR expected.");
@@ -20,6 +26,9 @@ void codegen_lval(Node *node) {
 }
 
 void codegen(Node *node) {
+    if (node == NULL) {
+        error("got NULL");
+    }
     switch (node->kind) {
         case ND_NUM:
             printf("    push %d\n", node->val);
@@ -46,6 +55,22 @@ void codegen(Node *node) {
             printf("    pop rbp\n");
             printf("    ret\n");
             return;
+        case ND_IFSTMT:
+            int else_label = new_mangle_number();
+            int end_label = new_mangle_number();
+            codegen(node->lhs->lhs); // ifbranch -> cond
+            printf("    pop rax\n");
+            printf("    cmp rax, 0\n");
+            printf("    je .Lelse%010d\n", else_label);
+            codegen(node->lhs->rhs); // ifbranch -> stmt
+            printf("    jmp .Lend%010d\n", end_label);
+            printf(".Lelse%010d:\n", else_label);
+            if (node->rhs) {
+                codegen(node->rhs); // else -> stmt
+            }
+            printf(".Lend%010d:\n", end_label);
+            return;
+
     }
 
     codegen(node->lhs);

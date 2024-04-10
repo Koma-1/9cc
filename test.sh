@@ -45,5 +45,9 @@ assert 7 "abc=1+2*3;"
 assert 16 "abc=1+2*3;bcd=(1+2)*3;abc+bcd;"
 assert 7 "abc=1+2*3;return abc;"
 assert 9 "abc=(1+2)*3;return abc;return 1;"
+assert 0 "if(1) return 0;else return 1;"
+assert 0 "if(1) if(1)return 0;else return 1;else return 2;"
+assert 1 "if(1) if(0)return 0;else return 1;"
+assert 2 "if(0) return 0; else if (0) return 1; else return 2;"
 
 echo OK

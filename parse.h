@@ -14,6 +14,8 @@ typedef enum {
     ND_ASSIGN,
     ND_LVAR,
     ND_RETURN,
+    ND_IFSTMT, // ND_IFSTMT(lhs: ND_IFBRANCH(lhs:if-cond, rhs: if-stmt), rhs: else-stmt)
+    ND_IFBRANCH, // ND_IFBRANCH(lhs:if-cond, rhs: if-stmt)
     ND_NUM,
 } NodeKind;
 
