@@ -43,7 +43,7 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if (strchr("+-*/()<>", *p)) {
+        if (strchr("+-*/()<>=;", *p)) {
             current_token = push_token(TK_RESERVED, current_token, p, 1);
             p++;
             continue;
@@ -52,6 +52,12 @@ Token *tokenize(char *p) {
         if (isdigit(*p)) {
             current_token = push_token(TK_NUM, current_token, p, 0);
             current_token->val = strtol(p, &p, 10);
+            continue;
+        }
+
+        if ('a' <= *p && *p <= 'z') {
+            current_token = push_token(TK_IDENT, current_token, p, 1);
+            p++;
             continue;
         }
 

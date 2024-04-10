@@ -11,6 +11,8 @@ typedef enum {
     ND_LEQ,
     ND_GT,
     ND_GEQ,
+    ND_ASSIGN,
+    ND_LVAR,
     ND_NUM,
 } NodeKind;
 
@@ -21,6 +23,10 @@ struct Node {
     Node *lhs;
     Node *rhs;
     int val;
+    int offset;
 };
 
+void parse_program(Token *tok);
 Node *parse(Token *tok);
+
+extern Node *code[100];

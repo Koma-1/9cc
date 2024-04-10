@@ -4,4 +4,4 @@
 
 #pragma once
 
-void codegen_main(Node *node);
+void codegen_main();

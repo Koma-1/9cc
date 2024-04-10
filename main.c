@@ -39,13 +39,15 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    Node *node = parse(tok);
+    parse_program(tok);
     if (opt == OPT_PARSE) {
-        print_nodetree(node);
+        for (int i=0; code[i]; i++) {
+            print_nodetree(code[i]);
+        }
         return 0;
     }
 
-    codegen_main(node);
+    codegen_main();
 
     return 0;
 }

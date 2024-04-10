@@ -11,10 +11,11 @@
 
 
 Token *token;
+Node *code[100];
 
 void expect_punct(char *op) {
     if (token->kind != TK_RESERVED) {
-        error("TK_RESERVED token expected, but got %d", token->kind);
+        error("TK_RESERVED token \"%s\" expected, but got %d('%c')", op, token->kind, token->str[0]);
         if (strlen(op) != token->len || !startswith(token->str, op)) {
             error("operator '%c' expected", op);
         }
@@ -39,6 +40,15 @@ int expect_number() {
     return val;
 }
 
+Token *consume_ident() {
+    if (token->kind == TK_IDENT) {
+        Token *tok = token;
+        token = token->next;
+        return tok;
+    }
+    return NULL;
+}
+
 bool at_eof() {
     return token->kind == TK_EOF;
 }
@@ -59,7 +69,9 @@ Node *new_node_num(int val) {
 }
 
 
+Node *parse_stmt();
 Node *parse_expr();
+Node *parse_assign();
 Node *parse_equality();
 Node *parse_relational();
 Node *parse_add();
@@ -72,8 +84,35 @@ Node *parse(Token *tok) {
     return parse_expr();
 }
 
+void parse_program(Token *tok) {
+    token = tok;
+    int i = 0;
+    while (!at_eof()) {
+        if (i >= 100-1) {
+            error("too long program");
+        }
+        code[i] = parse_stmt();
+        i++;
+        code[i] = NULL;
+    }
+}
+
+Node *parse_stmt() {
+    Node *node = parse_expr();
+    expect_punct(";");
+    return node;
+}
+
 Node *parse_expr() {
-    return parse_equality();
+    return parse_assign();
+}
+
+Node *parse_assign() {
+    Node *node = parse_equality();
+    if (consume_punct("=")) {
+        node = new_node(ND_ASSIGN, node, parse_equality());
+    }
+    return node;
 }
 
 Node *parse_equality() {
@@ -151,7 +190,14 @@ Node *parse_factor() {
         Node *node = parse_expr();
         expect_punct(")");
         return node;
-    } else {
-        return new_node_num(expect_number());
     }
+
+    Token *tok = consume_ident();
+    if (tok) {
+        Node *node = new_node(ND_LVAR, NULL, NULL);
+        node->offset = (tok->str[0] - 'a' + 1) * 8;
+        return node;
+    }
+
+    return new_node_num(expect_number());
 }
