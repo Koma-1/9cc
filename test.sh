@@ -39,9 +39,9 @@ assert 0 "2>2;"
 assert 1 "2>=1;"
 assert 1 "2>=2;"
 assert 0 "2>=3;"
-assert 3 "a=3;"
-assert 2 "a=3;a=2;a;"
-assert 7 "a=1+2*3;"
-assert 16 "a=1+2*3;b=(1+2)*3;a+b;"
+assert 3 "abc=3;"
+assert 2 "abc=3;abc=2;abc;"
+assert 7 "abc=1+2*3;"
+assert 16 "abc=1+2*3;bcd=(1+2)*3;abc+bcd;"
 
 echo OK

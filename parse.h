@@ -26,6 +26,16 @@ struct Node {
     int offset;
 };
 
+typedef struct LVar LVar;
+
+struct LVar {
+    LVar *next;
+    char *name;
+    int len;
+    int offset;
+};
+
+
 void parse_program(Token *tok);
 Node *parse(Token *tok);
 

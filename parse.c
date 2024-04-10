@@ -11,6 +11,7 @@
 
 
 Token *token;
+LVar *locals;
 Node *code[100];
 
 void expect_punct(char *op) {
@@ -66,6 +67,27 @@ Node *new_node_num(int val) {
     Node *node = new_node(ND_NUM, NULL, NULL);
     node->val = val;
     return node;
+}
+
+LVar *find_lvar(Token *tok) {
+    if (tok->kind != TK_IDENT) {
+        error("Token TK_IDENT expected, but got %d.", tok->kind);
+    }
+    for (LVar *var = locals; var; var=var->next) {
+        if (var->len == tok->len && !memcmp(var->name, tok->str, var->len)) {
+            return var;
+        }
+    }
+    return NULL;
+}
+
+LVar *push_lvar(Token *tok, LVar *head) {
+    LVar *var = calloc(1, sizeof(LVar));
+    var->name = tok->str;
+    var->len = tok->len;
+    var->offset = head ? head->offset + 8: 8;
+    var->next = head;
+    return var;
 }
 
 
@@ -194,8 +216,13 @@ Node *parse_factor() {
 
     Token *tok = consume_ident();
     if (tok) {
+        LVar *lvar = find_lvar(tok);
+        if (!lvar) {
+            locals = push_lvar(tok, locals);
+            lvar = locals;
+        }
         Node *node = new_node(ND_LVAR, NULL, NULL);
-        node->offset = (tok->str[0] - 'a' + 1) * 8;
+        node->offset = lvar->offset;
         return node;
     }
 

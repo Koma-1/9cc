@@ -12,6 +12,21 @@ bool startswith(char *str, char *prefix) {
     return strncmp(str, prefix, strlen(prefix)) == 0;
 }
 
+bool is_alnum(char c) {
+    return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || (c == '_');
+}
+
+int consume_alnum_str(char *c, char **endptr) {
+    char *tmp = c;
+    int len = 0;
+    while (is_alnum(*tmp)) {
+        len++;
+        tmp++;
+    }
+    *endptr = tmp;
+    return len;
+}
+
 Token *push_token(TokenKind kind, Token *tail, char *str, int len) {
     Token *tok = calloc(1, sizeof(Token));
     if (tok == NULL) {
@@ -55,9 +70,11 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if ('a' <= *p && *p <= 'z') {
-            current_token = push_token(TK_IDENT, current_token, p, 1);
-            p++;
+        if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z') || (*p == '_')) {
+            char *endp;
+            int len = consume_alnum_str(p, &endp);
+            current_token = push_token(TK_IDENT, current_token, p, len);
+            p = endp;
             continue;
         }
 
