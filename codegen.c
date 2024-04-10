@@ -36,6 +36,36 @@ void codegen(Node *node) {
             printf("    cqo\n");
             printf("    idiv rdi\n");
             break;
+        case ND_EQ:
+            printf("    cmp rax, rdi\n");
+            printf("    sete al\n");
+            printf("    movzb rax, al\n");
+            break;
+        case ND_NEQ:
+            printf("    cmp rax, rdi\n");
+            printf("    setne al\n");
+            printf("    movzb rax, al\n");
+            break;
+        case ND_LT:
+            printf("    cmp rax, rdi\n");
+            printf("    setl al\n");
+            printf("    movzb rax, al\n");
+            break;
+        case ND_LEQ:
+            printf("    cmp rax, rdi\n");
+            printf("    setle al\n");
+            printf("    movzb rax, al\n");
+            break;
+        case ND_GT:
+            printf("    cmp rax, rdi\n");
+            printf("    setl al\n");
+            printf("    movzb rax, al\n");
+            break;
+        case ND_GEQ:
+            printf("    cmp rax, rdi\n");
+            printf("    setle al\n");
+            printf("    movzb rax, al\n");
+            break;
         default:
             break;
     }
@@ -45,8 +75,8 @@ void codegen(Node *node) {
 
 void codegen_main(Node *node) {
     printf(".intel_syntax noprefix\n");
-    printf(".globl _main\n");
-    printf("_main:\n");
+    printf(".globl main\n");
+    printf("main:\n");
 
     codegen(node);
 

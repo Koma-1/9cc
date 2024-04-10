@@ -5,6 +5,12 @@ typedef enum {
     ND_SUB,
     ND_MUL,
     ND_DIV,
+    ND_EQ,
+    ND_NEQ,
+    ND_LT,
+    ND_LEQ,
+    ND_GT,
+    ND_GEQ,
     ND_NUM,
 } NodeKind;
 

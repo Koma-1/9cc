@@ -60,6 +60,9 @@ Node *new_node_num(int val) {
 
 
 Node *parse_expr();
+Node *parse_equality();
+Node *parse_relational();
+Node *parse_add();
 Node *parse_term();
 Node *parse_unary();
 Node *parse_factor();
@@ -70,6 +73,42 @@ Node *parse(Token *tok) {
 }
 
 Node *parse_expr() {
+    return parse_equality();
+}
+
+Node *parse_equality() {
+    Node *node = parse_relational();
+
+    for (;;) {
+        if (consume_punct("==")) {
+            node = new_node(ND_EQ, node, parse_relational());
+        } else if (consume_punct("!=")) {
+            node = new_node(ND_NEQ, node, parse_relational());
+        } else {
+            return node;
+        }
+    }
+}
+
+Node *parse_relational() {
+    Node *node = parse_add();
+
+    for (;;) {
+        if (consume_punct("<")) {
+            node = new_node(ND_LT, node, parse_add());
+        } else if (consume_punct("<=")) {
+            node = new_node(ND_LEQ, node, parse_add());
+        } else if (consume_punct(">")) {
+            node = new_node(ND_GT, node, parse_add());
+        } else if (consume_punct(">=")) {
+            node = new_node(ND_GEQ, node, parse_add());
+        } else {
+            return node;
+        }
+    }
+}
+
+Node *parse_add() {
     Node *node = parse_term();
 
     for (;;) {
