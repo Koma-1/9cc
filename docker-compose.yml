@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/workspace
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
