@@ -13,11 +13,11 @@ typedef enum {
     ND_GEQ,
     ND_ASSIGN,
     ND_LVAR,
-    ND_RETURN,
+    ND_RETURN, // ND_RETURN(lhs: expr, rhs: NULL)
     ND_IFSTMT, // ND_IFSTMT(lhs: ND_IFBRANCH(lhs:if-cond, rhs: if-stmt), rhs: else-stmt)
     ND_IFBRANCH, // ND_IFBRANCH(lhs:if-cond, rhs: if-stmt)
-    ND_WHILESTMT,
-    ND_BLOCK,
+    ND_WHILESTMT, // ND_WHILESTMT(lhs:cond, rhs: stmt)
+    ND_BLOCK, // ND_BLOCK(lhs:stmt, rhs: ND_BLOCK(lhs:stmt, rhs: NULL))
     ND_CALLFUNC,
     ND_NUM,
 } NodeKind;
