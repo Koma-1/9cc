@@ -18,6 +18,7 @@ typedef enum {
     ND_IFBRANCH, // ND_IFBRANCH(lhs:if-cond, rhs: if-stmt)
     ND_WHILESTMT,
     ND_BLOCK,
+    ND_CALLFUNC,
     ND_NUM,
 } NodeKind;
 
@@ -29,6 +30,7 @@ struct Node {
     Node *rhs;
     int val;
     int offset;
+    Token *tok;
 };
 
 typedef struct LVar LVar;

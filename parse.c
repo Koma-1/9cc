@@ -257,6 +257,13 @@ Node *parse_primary() {
 
     Token *tok = consume_ident();
     if (tok) {
+        if (consume_punct("(")) {
+            expect_punct(")");
+            Node *node = new_node(ND_CALLFUNC, NULL, NULL);
+            node->tok = tok;
+            return node;
+        }
+
         LVar *lvar = find_lvar(tok);
         if (!lvar) {
             locals = push_lvar(tok, locals);

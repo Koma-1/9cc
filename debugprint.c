@@ -68,6 +68,8 @@ void print_nodes(Node *node, int indent) {
         putchar('\n');
         print_indent(indent);
         putchar('}');
+    } else if (node->kind == ND_CALLFUNC) {
+        printf("ND_CALLFUNC{%.*s}", node->tok->len, node->tok->str);
     } else {
         switch (node->kind) {
             case ND_ADD:

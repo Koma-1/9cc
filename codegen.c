@@ -90,6 +90,11 @@ void codegen(Node *node) {
             }
             return;
         }
+        case ND_CALLFUNC: {
+            printf("    call %.*s\n", node->tok->len, node->tok->str);
+            printf("    push 7\n");// dummy
+            return;
+        }
     }
 
     codegen(node->lhs);
