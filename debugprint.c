@@ -112,6 +112,9 @@ void print_nodes(Node *node, int indent) {
             case ND_WHILESTMT:
                 printf("ND_WHILESTMT");
                 break;
+            case ND_BLOCK:
+                printf("ND_BLOCK");
+                break;
             default:
                 error("unreachable");
         }

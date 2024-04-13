@@ -82,6 +82,14 @@ void codegen(Node *node) {
             printf("    jmp .Lbegin%010d\n", begin_label);
             printf(".Lend%010d:\n", end_label);
             return;}
+        case ND_BLOCK: {
+            codegen(node->lhs);
+            if (node->rhs) {
+                printf("    pop rax\n");
+                codegen(node->rhs);
+            }
+            return;
+        }
     }
 
     codegen(node->lhs);

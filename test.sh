@@ -52,5 +52,8 @@ assert 0 "if(1) if(1)return 0;else return 1;else return 2;"
 assert 1 "if(1) if(0)return 0;else return 1;"
 assert 2 "if(0) return 0; else if (0) return 1; else return 2;"
 assert 5 "a=3;while(a<5)a=a+1;return a;"
+assert 2 "{a=1;a=2;}return a;"
+assert 35 "if(0){a=2;b=3;}else{a=5;b=7;}return a*b;"
+assert 14 "a=3;b=3;c=2;while(a<5){a=a+1;b=b+1;c=c+1;}return a+b+c;"
 
 echo OK

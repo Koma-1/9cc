@@ -147,6 +147,17 @@ Node *parse_stmt() {
         expect_punct(")");
         Node *stmt = parse_stmt();
         node = new_node(ND_WHILESTMT, cond, stmt);
+    } else if (consume_punct("{")) {
+        node = new_node(ND_BLOCK, NULL, NULL);
+        Node *tmp_node = node;
+        for (;;) {
+            if (consume_punct("}")) {
+                break;
+            }
+            tmp_node->rhs = new_node(ND_BLOCK, parse_stmt(), NULL);
+            tmp_node = tmp_node->rhs;
+        }
+        node = node->rhs;
     } else {
         node = parse_expr();
         expect_punct(";");

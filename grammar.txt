@@ -3,6 +3,7 @@ stmt    = expr ";"
         | "return" expr;
         | "if" "(" expr ")" stmt ("else" stmt)?
         | "while" "(" expr ")" stmt
+        | "{" stmt* "}"
 expr    = assign
 assign     = equality ("=" equality)?
 equality   = relational ("==" relational | "!=" relational)*

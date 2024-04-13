@@ -58,7 +58,7 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if (strchr("+-*/()<>=;", *p)) {
+        if (strchr("+-*/()<>=;{}", *p)) {
             current_token = push_token(TK_RESERVED, current_token, p, 1);
             p++;
             continue;
