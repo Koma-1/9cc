@@ -44,4 +44,5 @@ struct LVar {
 void parse_program(Token *tok);
 Node *parse(Token *tok);
 
+extern LVar *locals;
 extern Node *code[100];

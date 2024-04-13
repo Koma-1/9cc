@@ -173,7 +173,7 @@ Node *parse_expr() {
 Node *parse_assign() {
     Node *node = parse_equality();
     if (consume_punct("=")) {
-        node = new_node(ND_ASSIGN, node, parse_equality());
+        node = new_node(ND_ASSIGN, node, parse_assign());
     }
     return node;
 }

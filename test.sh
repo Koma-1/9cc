@@ -55,5 +55,7 @@ assert 5 "a=3;while(a<5)a=a+1;return a;"
 assert 2 "{a=1;a=2;}return a;"
 assert 35 "if(0){a=2;b=3;}else{a=5;b=7;}return a*b;"
 assert 14 "a=3;b=3;c=2;while(a<5){a=a+1;b=b+1;c=c+1;}return a+b+c;"
+assert 2 "a=b=2;return b;"
+assert 2 "a=b=2;return a;"
 
 echo OK
