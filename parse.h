@@ -18,7 +18,8 @@ typedef enum {
     ND_IFBRANCH, // ND_IFBRANCH(lhs:if-cond, rhs: if-stmt)
     ND_WHILESTMT, // ND_WHILESTMT(lhs:cond, rhs: stmt)
     ND_BLOCK, // ND_BLOCK(lhs:stmt, rhs: ND_BLOCK(lhs:stmt, rhs: NULL))
-    ND_CALLFUNC,
+    ND_CALLFUNC, // ND_CALLFUNC(lhs: NULL or ND_CALLARG, rhs: NULL)
+    ND_CALLARG, // ND_CALLARG(lhs:expr, rhs: ND_CALLARG(lhs:expr, rhs: NULL))
     ND_NUM,
 } NodeKind;
 

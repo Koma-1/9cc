@@ -10,7 +10,11 @@
 #include "parse.h"
 #include "codegen.h"
 
+char *arg_regstr[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+
 int mangle_counter = 0;
+
+void codegen(Node *node);
 
 int new_mangle_number() {
     return ++mangle_counter;
@@ -23,6 +27,21 @@ void codegen_lval(Node *node) {
     printf("    mov rax, rbp\n");
     printf("    sub rax, %d\n", node->offset);
     printf("    push rax\n");
+}
+
+void codegen_args(Node *node, int count) {
+    if (!node) {
+        return;
+    }
+
+    if (count > 5) {
+        error("too many arguments.");
+    }
+
+    codegen(node->lhs);
+    printf("    pop %s;\n", arg_regstr[count]);
+
+    codegen_args(node->rhs, count+1);
 }
 
 void codegen(Node *node) {
@@ -91,6 +110,7 @@ void codegen(Node *node) {
             return;
         }
         case ND_CALLFUNC: {
+            codegen_args(node->lhs, 0);
             printf("    call %.*s\n", node->tok->len, node->tok->str);
             printf("    push 7\n");// dummy
             return;

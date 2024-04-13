@@ -108,6 +108,7 @@ Node *parse_add();
 Node *parse_term();
 Node *parse_unary();
 Node *parse_primary();
+Node *parse_arg();
 
 Node *parse(Token *tok) {
     token = tok;
@@ -258,8 +259,12 @@ Node *parse_primary() {
     Token *tok = consume_ident();
     if (tok) {
         if (consume_punct("(")) {
+            Node *node = NULL;
+            if (!consume_punct(")")) {
+                node = parse_arg();
+            }
             expect_punct(")");
-            Node *node = new_node(ND_CALLFUNC, NULL, NULL);
+            node = new_node(ND_CALLFUNC, node, NULL);
             node->tok = tok;
             return node;
         }
@@ -275,4 +280,14 @@ Node *parse_primary() {
     }
 
     return new_node_num(expect_number());
+}
+
+Node *parse_arg() {
+    Node *node = new_node(ND_CALLARG, parse_expr(), NULL);
+
+    if (consume_punct(",")) {
+        node->rhs = parse_arg();
+    }
+
+    return node;
 }

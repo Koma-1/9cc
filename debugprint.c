@@ -69,7 +69,13 @@ void print_nodes(Node *node, int indent) {
         print_indent(indent);
         putchar('}');
     } else if (node->kind == ND_CALLFUNC) {
-        printf("ND_CALLFUNC{%.*s}", node->tok->len, node->tok->str);
+        printf("ND_CALLFUNC[%.*s]{", node->tok->len, node->tok->str);
+        if (node->lhs) {
+            putchar('\n');
+            print_nodes(node->lhs, indent+1);
+            putchar('\n');
+        }
+        putchar('}');
     } else {
         switch (node->kind) {
             case ND_ADD:
@@ -116,6 +122,9 @@ void print_nodes(Node *node, int indent) {
                 break;
             case ND_BLOCK:
                 printf("ND_BLOCK");
+                break;
+            case ND_CALLARG:
+                printf("ND_CALLARG");
                 break;
             default:
                 error("unreachable");
