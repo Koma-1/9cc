@@ -107,7 +107,7 @@ Node *parse_relational();
 Node *parse_add();
 Node *parse_term();
 Node *parse_unary();
-Node *parse_factor();
+Node *parse_primary();
 
 Node *parse(Token *tok) {
     token = tok;
@@ -240,15 +240,15 @@ Node *parse_term() {
 
 Node *parse_unary() {
     if (consume_punct("+")) {
-        return parse_factor();
+        return parse_primary();
     }
     if (consume_punct("-")) {
-        return new_node(ND_SUB, new_node_num(0), parse_factor());
+        return new_node(ND_SUB, new_node_num(0), parse_primary());
     }
-    return parse_factor();
+    return parse_primary();
 }
 
-Node *parse_factor() {
+Node *parse_primary() {
     if (consume_punct("(")) {
         Node *node = parse_expr();
         expect_punct(")");
